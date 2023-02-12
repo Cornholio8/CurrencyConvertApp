@@ -1,5 +1,5 @@
 import ResultBox from './ResultBox';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('Component ResultBox', () => {
@@ -20,6 +20,9 @@ describe('Component ResultBox', () => {
             render(<ResultBox from="PLN" to="USD" amount={parseInt(testObj.amount)} />);
             const output = screen.getByTestId('output');
             expect(output).toHaveTextContent(testObj.expectResult);
+
+            // unmount component
+            cleanup()
         });
     };
 
@@ -36,6 +39,9 @@ describe('Component ResultBox', () => {
             render(<ResultBox from="USD" to="PLN" amount={parseInt(testObj.amount)} />);
             const output = screen.getByTestId('output');
             expect(output).toHaveTextContent(testObj.expectResult);
+
+            // unmount component
+            cleanup()
         });
     };
 
@@ -52,6 +58,9 @@ describe('Component ResultBox', () => {
             render(<ResultBox from="PLN" to="PLN" amount={parseInt(testObj.amount)} />);
             const output = screen.getByTestId('output');
             expect(output).toHaveTextContent(testObj.expectResult);
+
+            // unmount component
+            cleanup()
         });
     };
 
@@ -68,6 +77,28 @@ describe('Component ResultBox', () => {
             render(<ResultBox from="USD" to="USD" amount={parseInt(testObj.amount)} />);
             const output = screen.getByTestId('output');
             expect(output).toHaveTextContent(testObj.expectResult);
+
+            // unmount component
+            cleanup()
         });
     };
+
+
+    const testCasesMinus = [
+        { amount: '-100', expectResult:'Wrong Value'},
+        { amount: '-20', expectResult: 'Wrong Value' },
+        { amount: '-200', expectResult: 'Wrong Value' },
+        { amount: '-345', expectResult: 'Wrong Value' },
+    ];
+
+    for (const testObj of testCasesMinus) {
+    it('should render Wrong Value when input is < 0', () => {
+        render(<ResultBox from="PLN" to="USD" amount={parseInt(testObj.amount)} />);
+        const output = screen.getByTestId('output');
+        expect(output).toHaveTextContent('Wrong Value');
+
+        // unmount component
+        cleanup()
+    });
+}
   });
